@@ -10,6 +10,9 @@ const express    = require('express');
 const cors       = require('cors');
 const bodyParser = require('body-parser');
 
+//Cria um objeto especialista no formato JSON para receber os dados do body (POST e PUT)
+const bodyParserJSON = bodyParser.json()
+
 // ========== IMPORT'S CONTROLLER'S ==========
 //Controller Filme
 const controllerFilme = require('./controller/filme/controller_filme.js')
@@ -48,6 +51,21 @@ app.get('/v1/locadora/filme/:id', cors(), async (request, response) => {
     response.json(filme);
 });
 
+app.post('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (request, response){
+    // Recebe o objeto JSON pelo body da requisição
+    let dadosBody = request.body
+
+    // Recebe o content type da requisição
+    let contentType = request.headers['content-type']
+
+    // Chama a função da controller para inserir o filme, enviamos os dados do body e o content-type 
+    let filme = await controllerFilme.inserirFilme(dadosBody, contentType)
+
+    response.status(filme.status_code)
+    response.json(filme)
+
+
+})
 // ====================================
 
 app.listen(PORT, () => {

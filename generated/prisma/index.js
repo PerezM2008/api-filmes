@@ -122,7 +122,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\25132821\\Desktop\\PBACK\\comeco-sql\\generated\\prisma",
+      "value": "C:\\Users\\25132972\\Documents\\pback-api_movies\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -136,7 +136,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\25132821\\Desktop\\PBACK\\comeco-sql\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\25132972\\Documents\\pback-api_movies\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

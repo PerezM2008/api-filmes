@@ -44,6 +44,8 @@ const ERROR_REQUIRED_FIELDS = {
     status_code: 400,
     message: 'Não foi possível processar a requisição devido a campos obrigatórios que não foram enviados corretamente, conforme a documentação da API!'
 };
+
+const ERROR_CONTENT_TYPE = {status: false, status_code: 415, message: 'Não foi possível concluir, pois o tipo de conteúdo não é um JSON! ' }
 /*========================================================================================= */
 
 
@@ -53,9 +55,13 @@ const REQUEST_SUCESS = {
     status_code: 200,
     message: 'Requisição bem sucedida!'
 };
+
+const SUCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Requisição bem sucedida! Novo recurso criado.'};
 /*========================================================================================= */
 
 module.exports = {
+    ERROR_CONTENT_TYPE,
+    SUCESS_CREATED_ITEM,
     HEADER,
     REQUEST_SUCESS,
     ERROR_NOT_FOUND,
