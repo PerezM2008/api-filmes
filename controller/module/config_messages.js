@@ -12,7 +12,7 @@ const dataAtual = new Date();
 const HEADER = {
     status: '',
     status_code: '',
-    developer: 'Leonardo Scotti',
+    developer: 'Matheus Perez',
     api_description: 'API para manipular dados da locadora de filmes.',
     version: '1.0.10.25',
     request_date: dataAtual.toLocaleDateString(),
@@ -45,7 +45,11 @@ const ERROR_REQUIRED_FIELDS = {
     message: 'Não foi possível processar a requisição devido a campos obrigatórios que não foram enviados corretamente, conforme a documentação da API!'
 };
 
-const ERROR_CONTENT_TYPE = {status: false, status_code: 415, message: 'Não foi possível concluir, pois o tipo de conteúdo não é um JSON! ' }
+const ERROR_CONTENT_TYPE = {
+    status: false, 
+    status_code: 415, 
+    message: 'Não foi possível concluir, pois o tipo de conteúdo não é um JSON! ' 
+};
 /*========================================================================================= */
 
 
@@ -57,6 +61,10 @@ const REQUEST_SUCESS = {
 };
 
 const SUCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Requisição bem sucedida! Novo recurso criado.'};
+
+const SUCESS_UPDATE_ITEM = {status: true, status_code: 200, message: 'Requisiçõa bem sucedida! Objeto atualizado com sucesso.'}
+
+const SUCESS_DELETE_ITEM = {status: true, status_code: 200, message: 'Requisiçõa bem sucedida! Objeto Deletado com sucesso.'}
 /*========================================================================================= */
 
 module.exports = {
@@ -67,5 +75,7 @@ module.exports = {
     ERROR_NOT_FOUND,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_INTERNAL_SERVER_CONTROLLER,
-    ERROR_REQUIRED_FIELDS
+    ERROR_REQUIRED_FIELDS,
+    SUCESS_UPDATE_ITEM,
+    SUCESS_DELETE_ITEM
 };

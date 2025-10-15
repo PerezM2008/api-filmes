@@ -32,7 +32,9 @@ app.use((request, response, next) => {
     next();
 })
 
+
 // ========== ENDPOINTS CRUD ==========
+
 //EndPoint que retorna a lista de filmes
 app.get('/v1/locadora/filme', cors(), async (request, response) => {
     let filmes = await controllerFilme.listarFilmes();
@@ -51,7 +53,7 @@ app.get('/v1/locadora/filme/:id', cors(), async (request, response) => {
     response.json(filme);
 });
 
-app.post('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (request, response){
+app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, response){
     // Recebe o objeto JSON pelo body da requisição
     let dadosBody = request.body
 
@@ -66,8 +68,36 @@ app.post('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (reque
 
 
 })
+
+app.put('/v1/locadora/filme/:id', cors(),bodyParserJSON, async function (request, response) {
+    //Recebe os dados do body
+    let dadosBody = request.body
+
+    //Recebe o id do filme encaminhado pela URL 
+    let idFilme = request.params.id
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //
+    let filme = await controllerFilme.atualizarFilme(dadosBody, idFilme, contentType)
+
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
+app.delete('/v1/locadora/filme/:id', cors(), async function (request, response) {
+
+    let idFilme = request.params.id
+
+    let filme = await controllerFilme.excluirFilme(idFilme)
+
+    response.status(filme.status_code)
+    response.json(filme)
+    
+})
 // ====================================
 
-app.listen(PORT, () => {
+app.listen(PORT, function() {
     console.log('API aguardando requisições...')
 });
