@@ -1,7 +1,7 @@
 /*******************************************************************************************
  * Objetivo: Arquivo respnsável pela realização do CRUD de filme no Banco de Dados MySQL
  * Data: 01/10/2025
- * Autor: Leonardo Scotti
+ * Autor: Matheus Perez
  * Versão: 1.0
  ******************************************************************************************/
 
