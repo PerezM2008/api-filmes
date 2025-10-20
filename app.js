@@ -1,7 +1,7 @@
 /*******************************************************************************************
- * Objetivo: Arquivo respnsável pelas requisições da API do projeto da locadora de filmes.
+ * Objetivo: Arquivo responsável pelas requisições da API do projeto da locadora de filmes.
  * Data: 07/10/2025
- * Autor: Leonardo Scotti
+ * Autor: Matheus Perez
  * Versão: 1.0
  ******************************************************************************************/
 
