@@ -2,7 +2,7 @@
  * Objetivo: Arquivo respnsável pela padronização de todas as mensagens da API do Projeto de
  *              Filmes.
  * Data: 07/10/2025
- * Autor: Leonardo Scotti
+ * Autor: Matheus Perez
  * Versão: 1.0
  ******************************************************************************************/
 

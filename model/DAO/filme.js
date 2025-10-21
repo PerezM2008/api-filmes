@@ -1,7 +1,7 @@
 /*******************************************************************************************
  * Objetivo: Arquivo respnsável pela realização do CRUD de filme no Banco de Dados MySQL
  * Data: 01/10/2025
- * Autor: Leonardo Scotti
+ * Autor: Matheus Perez
  * Versão: 1.0
  ******************************************************************************************/
 
@@ -94,7 +94,28 @@ const getSelectByIdFilms = async (id) => {
     }
 };
 
-//Insere um filme no DB
+//
+const getSelectLastIdFilms = async() => {
+    try {
+        //Script SQL
+        let sql = `select * from tbl_filmes order by id desc`;
+
+        //Executa no DB o script SQL
+        let result = await prisma.$queryRawUnsafe(sql);
+
+        //Validação para identificar se o retorno do DB é um ARRAY (vazio ou com dados)
+        if (Array.isArray(result))
+            return Number(result[0].id)
+        else
+            return false;
+
+    } catch (error) {
+        //console.log(error);
+        return false;
+    }
+};
+
+//Inserir um filme no DB
 const setInsertFilms = async (filme) => {
 
     try {
@@ -181,5 +202,6 @@ module.exports = {
     getSelectByIdFilms,
     setInsertFilms,
     setUpdateFilms,
-    setDeleteFilms
+    setDeleteFilms,
+    getSelectLastIdFilms
 }

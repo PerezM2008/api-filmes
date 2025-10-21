@@ -2,7 +2,7 @@
  * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL (Validações,
  *              tratamento de dados, tratamento de Erros, etc...).
  * Data: 07/10/2025
- * Autor: Leonardo Scotti
+ * Autor: Matheus Perez
  * Versão: 1.0
  ******************************************************************************************/
 
@@ -103,12 +103,20 @@ const inserirFilme = async (filme, contentType) => {
                 let result = await filmeDAO.setInsertFilms(filme)
 
                 if(result){
+
+                    //chama a função para receber o ID gerado do BD
+                let lastIdFilme = await filmeDAO.getSelectLastIdFilms()
+
+                if(lastIdFilme){
+                    //Adiciona no JSON de filme o ID que foi gerado pelo BD
+                    filme.id                    =  lastIdFilme
                     MESSAGE.HEADER.status       =  MESSAGE.SUCESS_CREATED_ITEM.status
                     MESSAGE.HEADER.status_code  =  MESSAGE.SUCESS_CREATED_ITEM.status_code
                     MESSAGE.HEADER.message      =  MESSAGE.SUCESS_CREATED_ITEM.message
+                    MESSAGE.HEADER.response     =  filme
 
                     return MESSAGE.HEADER //201
-
+                }
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                 }
