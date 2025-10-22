@@ -16,14 +16,13 @@ const bodyParserJSON = bodyParser.json()
 // ========== IMPORT'S CONTROLLER'S ==========
 //Controller Filme
 const controllerFilme = require('./controller/filme/controller_filme.js')
+const controllerGenero = require('./controller/genero/controller_genero.js')
 
-// ===========================================
+// ============ CONFIGURAÇÕA DA PORTA DE SAIDA ==============
 
 const PORT = process.PORT || 8080;
-
 const app = express();
 
-//cors
 app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -33,7 +32,7 @@ app.use((request, response, next) => {
 })
 
 
-// ========== ENDPOINTS CRUD ==========
+// ========== ENDPOINTS CRUD - FILMES ==========
 
 //EndPoint que retorna a lista de filmes
 app.get('/v1/locadora/filme', cors(), async (request, response) => {
@@ -96,7 +95,25 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response) 
     response.json(filme)
     
 })
-// ====================================
+
+// ========== ENDPOINTS CRUD - GÊNEROS ==========
+
+app.get('/v1/locadora/genero', cors(), async (request, response) => {
+    let genero = await controllerGenero.listarGeneros();
+
+    response.status(genero.status_code);
+    response.json(genero);
+
+});
+
+app.get('/v1/locadora/genero/:id', cors(), async (request, response) => {
+    let id = request.params.id;
+
+    let genero = await controllerGenero.filtrarGenerosId(id);
+
+    response.status(genero.status_code);
+    response.json(genero);
+});
 
 app.listen(PORT, function() {
     console.log('API aguardando requisições...')

@@ -1,5 +1,6 @@
 CREATE DATABASE db_locadora_filme_ds2t_25_2;
 
+-- Criação da tabela Filme
 CREATE TABLE tbl_filme(
 	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	nome VARCHAR(100) NOT NULL,
@@ -39,4 +40,10 @@ values ("Hotel Costiera",
     150000000.00,
     "https://www.imdb.com/pt/video/vi1780795417/?playlistId=tt13924416&ref_=tt_ov_pr_ov_vi",
     "https://www.imdb.com/pt/title/tt13924416/mediaviewer/rm2396239618/?ref_=tt_ov_i"
+);
+
+/*Criação da tabela Genero*/
+CREATE TABLE tbl_genero (
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	nome VARCHAR (50) NOT NULL
 );

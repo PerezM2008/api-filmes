@@ -13,7 +13,7 @@ const HEADER = {
     status: '',
     status_code: '',
     developer: 'Matheus Perez',
-    api_description: 'API para manipular dados da locadora de filmes.',
+    api_description: 'API para gerenciadora de filmes.',
     version: '1.0.10.25',
     request_date: dataAtual.toLocaleDateString(),
     response: {}

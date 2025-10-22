@@ -36,3 +36,8 @@ VALUES (
 'https://upload.wikimedia.org/wikipedia/pt/thumb/5/5c/The_Empire_Strikes_Back.jpg/250px-The_Empire_Strikes_Back.jpg'
 );
 
+
+CREATE TABLE tbl_genero (
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	nome VARCHAR (50) NOT NULL
+);
