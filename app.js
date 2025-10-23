@@ -115,6 +115,50 @@ app.get('/v1/locadora/genero/:id', cors(), async (request, response) => {
     response.json(genero);
 });
 
+app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (request, response){
+    // Recebe o objeto JSON pelo body da requisição
+    let dadosBody = request.body
+
+    // Recebe o content type da requisição
+    let contentType = request.headers['content-type']
+
+    // Chama a função da controller para inserir o filme, enviamos os dados do body e o content-type 
+    let genero = await controllerGenero.inserirGenero(dadosBody, contentType)
+
+    response.status(genero.status_code)
+    response.json(genero)
+});
+
+app.put('/v1/locadora/genero/:id', cors(),bodyParserJSON, async function (request, response) {
+    //Recebe os dados do body
+    let dadosBody = request.body
+
+    //Recebe o id do filme encaminhado pela URL 
+    let idGenero = request.params.id
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //
+    let genero = await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
+
+    response.status(genero.status_code)
+    response.json(genero)
+});
+
+app.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
+
+    let idGenero = request.params.id
+
+    let genero = await controllerGenero.excluirGenero(idGenero)
+
+    response.status(genero.status_code)
+    response.json(genero)
+    
+})
+
+/*/////////////////////////////////////////////////////////////////////*/
+
 app.listen(PORT, function() {
     console.log('API aguardando requisições...')
 });

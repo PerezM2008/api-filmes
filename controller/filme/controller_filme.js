@@ -249,7 +249,7 @@ const validarDadosFilme = async function (filme) {
         return false
 }
 
-} 
+};
 
 
 module.exports = {
