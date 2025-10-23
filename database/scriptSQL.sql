@@ -42,8 +42,29 @@ values ("Hotel Costiera",
     "https://www.imdb.com/pt/title/tt13924416/mediaviewer/rm2396239618/?ref_=tt_ov_i"
 );
 
-/*Criação da tabela Genero*/
+
+
+-- Criação da tabela Genero
 CREATE TABLE tbl_genero (
 	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	nome VARCHAR (50) NOT NULL
 );
+
+
+
+-- Criação da tabela Cenário
+CREATE TABLE tbl_cenario (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nome VARCHAR (100) NOT NULL,
+    localidade VARCHAR (100) NOT NULL
+
+);
+
+insert into tbl_cenario(nome, localidade)
+values ("Rota de tiro", "Rio de Janeiro");
+
+insert into tbl_cenario(nome, localidade)
+values ("Caminho florestal", "Amazonia");
+
+insert into tbl_cenario(nome, localidade)
+values ("Prédio abandonado", "São Paulo");
