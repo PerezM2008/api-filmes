@@ -12,7 +12,7 @@ const generoDAO = require('../../model/DAO/genero.js');
 const MESSAGE_DEFAULT = require('../module/config_messages.js');
 
 //GET - Retorna todos os generos Cadastrados
-const listartodosGeneros = async () => {
+const listarTodosGeneros = async () => {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -222,7 +222,7 @@ const validarDadosGenero = async function (genero) {
 
 
 module.exports = {
-    listartodosGeneros,
+    listarTodosGeneros,
     filtrarGenerosId,
     inserirGenero,
     atualizarGenero,

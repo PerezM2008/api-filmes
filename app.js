@@ -15,7 +15,7 @@ const bodyParserJSON = bodyParser.json()
 
 // ========== IMPORT'S CONTROLLER'S ==========
 //Controller Filme
-const controllerFilme   = require('./controller/filme/controller_filme.js')
+const controllerFilme   = require('./controller/personagem/controller_filme.js')
 const controllerGenero  = require('./controller/genero/controller_genero.js')
 const controllerCenario = require('./controller/cenario/controller_cenario.js')
 
@@ -36,64 +36,64 @@ app.use((request, response, next) => {
 // ========== ENDPOINTS CRUD - FILMES ==========>
 
 //EndPoint que retorna a lista de filmes
-app.get('/v1/locadora/filme', cors(), async (request, response) => {
+app.get('/v1/locadora/personagem', cors(), async (request, response) => {
     let filmes = await controllerFilme.listarFilmes();
 
     response.status(filmes.status_code);
     response.json(filmes);
 });
 
-//EndPoint que retorna um filme filtrando pelo ID
-app.get('/v1/locadora/filme/:id', cors(), async (request, response) => {
+//EndPoint que retorna um personagem filtrando pelo ID
+app.get('/v1/locadora/personagem/:id', cors(), async (request, response) => {
     let id = request.params.id;
 
-    let filme = await controllerFilme.buscarFilmeId(id);
+    let personagem = await controllerFilme.buscarFilmeId(id);
 
-    response.status(filme.status_code);
-    response.json(filme);
+    response.status(personagem.status_code);
+    response.json(personagem);
 });
 
-app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, response){
+app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response){
     // Recebe o objeto JSON pelo body da requisição
     let dadosBody = request.body
 
     // Recebe o content type da requisição
     let contentType = request.headers['content-type']
 
-    // Chama a função da controller para inserir o filme, enviamos os dados do body e o content-type 
-    let filme = await controllerFilme.inserirFilme(dadosBody, contentType)
+    // Chama a função da controller para inserir o personagem, enviamos os dados do body e o content-type 
+    let personagem = await controllerFilme.inserirFilme(dadosBody, contentType)
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(personagem.status_code)
+    response.json(personagem)
 
 
 })
 
-app.put('/v1/locadora/filme/:id', cors(),bodyParserJSON, async function (request, response) {
+app.put('/v1/locadora/personagem/:id', cors(),bodyParserJSON, async function (request, response) {
     //Recebe os dados do body
     let dadosBody = request.body
 
-    //Recebe o id do filme encaminhado pela URL 
-    let idFilme = request.params.id
+    //Recebe o id do personagem encaminhado pela URL 
+    let idPersonagem = request.params.id
 
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
     //
-    let filme = await controllerFilme.atualizarFilme(dadosBody, idFilme, contentType)
+    let personagem = await controllerFilme.atualizarFilme(dadosBody, idPersonagem, contentType)
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(personagem.status_code)
+    response.json(personagem)
 })
 
-app.delete('/v1/locadora/filme/:id', cors(), async function (request, response) {
+app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
 
-    let idFilme = request.params.id
+    let idPersonagem = request.params.id
 
-    let filme = await controllerFilme.excluirFilme(idFilme)
+    let personagem = await controllerFilme.excluirFilme(idPersonagem)
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(personagem.status_code)
+    response.json(personagem)
     
 })
 
@@ -123,7 +123,7 @@ app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (request,
     // Recebe o content type da requisição
     let contentType = request.headers['content-type']
 
-    // Chama a função da controller para inserir o filme, enviamos os dados do body e o content-type 
+    // Chama a função da controller para inserir o personagem, enviamos os dados do body e o content-type 
     let genero = await controllerGenero.inserirGenero(dadosBody, contentType)
 
     response.status(genero.status_code)
@@ -134,7 +134,7 @@ app.put('/v1/locadora/genero/:id', cors(),bodyParserJSON, async function (reques
     //Recebe os dados do body
     let dadosBody = request.body
 
-    //Recebe o id do filme encaminhado pela URL 
+    //Recebe o id do personagem encaminhado pela URL 
     let idGenero = request.params.id
 
     //Recebe o content-type da requisição
@@ -184,7 +184,7 @@ app.post('/v1/locadora/cenario', cors(), bodyParserJSON, async function (request
     // Recebe o content type da requisição
     let contentType = request.headers['content-type']
 
-    // Chama a função da controller para inserir o filme, enviamos os dados do body e o content-type 
+    // Chama a função da controller para inserir o personagem, enviamos os dados do body e o content-type 
     let cenario = await controllerCenario.inserirCenario(dadosBody, contentType)
 
     response.status(cenario.status_code)
@@ -214,15 +214,75 @@ app.delete('/v1/locadora/cenario/:id', cors(), async function (request, response
 
     let idCenario = request.params.id
 
-    let filme = await controllerCenario.excluirCenario(idCenario)
+    let personagem = await controllerCenario.excluirCenario(idCenario)
 
     response.status(cenario.status_code)
     response.json(cenario)
     
 })
 
-// ========== ENDPOINTS CRUD - PRODUTORA ==========>
+// ========== ENDPOINTS CRUD - PERSONAGEM ==========>
 
+    app.get('/v1/locadora/personagem', cors(), async (request, response) => {
+    let personagem = await controllerPersonagem.listarPersonagem();
+
+    response.status(personagem.status_code);
+    response.json(personagem);
+});
+
+//EndPoint que retorna um personagem filtrando pelo ID
+app.get('/v1/locadora/personagem/:id', cors(), async (request, response) => {
+    let id = request.params.id;
+
+    let personagem = await controllerPersonagem.buscarPersonagemId(id);
+
+    response.status(personagem.status_code);
+    response.json(personagem);
+});
+
+app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response){
+    // Recebe o objeto JSON pelo body da requisição
+    let dadosBody = request.body
+
+    // Recebe o content type da requisição
+    let contentType = request.headers['content-type']
+
+    // Chama a função da controller para inserir o Personagem, enviamos os dados do body e o content-type 
+    let personagem = await controllerPersonagem.inserirPersonagem(dadosBody, contentType)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+
+
+})
+
+app.put('/v1/locadora/personagem/:id', cors(),bodyParserJSON, async function (request, response) {
+    //Recebe os dados do body
+    let dadosBody = request.body
+
+    //Recebe o id do personagem encaminhado pela URL 
+    let idPersonagem = request.params.id
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //
+    let personagem = await controllerPersonagem.atualizarPersonagem(dadosBody, idPersonagem, contentType)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+
+    let idPersonagem = request.params.id
+
+    let personagem = await controllerPersonagem.excluirPersonagem(idPersonagem)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+    
+})
     
 /*/////////////////////////////////////////////////////////////////////*/
 

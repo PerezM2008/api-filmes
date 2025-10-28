@@ -257,5 +257,6 @@ module.exports = {
     buscarFilmeId,
     inserirFilme,
     atualizarFilme,
-    excluirFilme
+    excluirFilme,
+    validarDadosFilme
 }

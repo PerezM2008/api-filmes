@@ -55,8 +55,8 @@ CREATE TABLE tbl_genero (
 -- Criação da tabela Cenário
 CREATE TABLE tbl_cenario (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    nome VARCHAR (100) NOT NULL,
-    localidade VARCHAR (100) NOT NULL
+    nome VARCHAR (150) NOT NULL,
+    localidade VARCHAR (200) NOT NULL
 
 );
 
@@ -68,3 +68,18 @@ values ("Caminho florestal", "Amazonia");
 
 insert into tbl_cenario(nome, localidade)
 values ("Prédio abandonado", "São Paulo");
+
+-- Criação da tabela Personagens
+
+CREATE TABLE tbl_personagens(
+    id_personagens INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nome VARCHAR (50) NOT NULL,
+    data_idade DATE NOT NULL,
+    localidade VARCHAR (300) NOT NULL
+);
+
+insert into tbl_personagens(nome, data_idade, localidade)
+values ("Celso Mussumano", "02-07-1678", "Rio de Janeiro")
+
+insert into tbl_personagens(nome, data_idade, localidade)
+values ("Kishura Muytu", "09-10-2019", "Japão")

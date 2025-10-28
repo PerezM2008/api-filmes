@@ -1,4 +1,4 @@
-/***********************************************************************************************************************************
+/**********************************************************************************************************************************
  * Objetivo: Arquivo responsável pela realização do CRUD da tabela Genero no Banco de Dados MySQL
  * Data: 22/10/2025
  * Autor: Matheus Perez
@@ -11,12 +11,12 @@ const { PrismaClient } = require('../../generated/prisma');
 const prisma = new PrismaClient();
 
 //Retorna todas as informações do Gênero
-const getAllGenere = async() => {
+const getAllPersonagem = async() => {
 
     try{
 
     //script que será utilizado no BD
-    let sql = `select * from tbl_genero order by id desc`;
+    let sql = `select * from tbl_personagens order by id desc`;
 
     //Result - Executa no BD o script do sql (variavel que está o script)
     let result = await prisma.$queryRawUnsafe(sql);
@@ -32,10 +32,10 @@ const getAllGenere = async() => {
 };
 
 //Retorna Filtrado por ID
-const getFilterByGenereId = async (id) => {
+const getFilterByPersonagemId = async (id) => {
 
     try {
-    let sql = `select * from tbl_genero where id = ${id}`;
+    let sql = `select * from tbl_personagens where id = ${id}`;
 
     let result = await prisma.$queryRawUnsafe(sql);
 
@@ -50,10 +50,13 @@ const getFilterByGenereId = async (id) => {
 };
 
 // INSERT - Adciona um novo genero na tabela
-const setInsertGenere = async (genero) => {
+const setInsertPersonagem = async (personagens) => {
     try {
-            let sql = `INSERT INTO tbl_genero (nome)
-            values ('${genero.nome}')`
+            let sql = `INSERT INTO tbl_personagens (nome, data_idade, nascionalidade)
+            values ('${personagens.nome}',
+                    '${personagens.data_idade}'
+                    '${personagens.localidade}'
+                    )`
                 
 
             // $executeRawUnsafe() ->  Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
@@ -68,12 +71,14 @@ const setInsertGenere = async (genero) => {
         }    
 };
 
-const setUpdateGenere = async(genero) => {
+const setUpdatePersonagem = async(personagens) => {
     try {
         let sql = `update tbl_genero set
-                        nome             =   '${genero.nome}'
-                        
-                        where id         =    ${genero.id}`
+                        nome             =   '${personagens.nome}',
+                        data_idade       =   '${personagens.data_idade}',
+                        localidade       =   '${personagens.localidade}',
+
+                        where id         =    ${personagens.id}`
 
 
         // $executeRawUnsafe() ->  Executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
@@ -89,9 +94,9 @@ const setUpdateGenere = async(genero) => {
 
 };
 
-const setDeleteGenere = async(id) => {
+const setDeletePersonagem = async(id) => {
     try {
-        let sql = `DELETE FROM tbl_genero where id = ${id}`
+        let sql = `DELETE FROM tbl_personagens where id = ${id}`
 
             let result = await prisma.$executeRawUnsafe(sql)
 
@@ -106,10 +111,10 @@ const setDeleteGenere = async(id) => {
     }
 }
 
-const getSelectLastIdGenere = async() => {
+const getSelectLastIdPersonagem = async() => {
     try {
         //Script SQL
-        let sql = `select * from tbl_genero order by id desc`;
+        let sql = `select * from tbl_personagens order by id desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -128,10 +133,10 @@ const getSelectLastIdGenere = async() => {
 
 /*//////////////////////////////////////////////////////////////////////*/
 module.exports = {
-    getAllGenere,
-    getFilterByGenereId,
-    setUpdateGenere,
-    setInsertGenere,
-    setDeleteGenere,
-    getSelectLastIdGenere
+    getAllPersonagem,
+    getFilterByPersonagemId,
+    setUpdatePersonagem,
+    setInsertPersonagem,
+    setDeletePersonagem,
+    getSelectLastIdPersonagem
 }
