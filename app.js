@@ -15,8 +15,9 @@ const bodyParserJSON = bodyParser.json()
 
 // ========== IMPORT'S CONTROLLER'S ==========
 //Controller Filme
-const controllerFilme = require('./controller/filme/controller_filme.js')
-const controllerGenero = require('./controller/genero/controller_genero.js')
+const controllerFilme   = require('./controller/filme/controller_filme.js')
+const controllerGenero  = require('./controller/genero/controller_genero.js')
+const controllerCenario = require('./controller/cenario/controller_cenario.js')
 
 // ============ CONFIGURAÇÕA DA PORTA DE SAIDA ==============
 
@@ -32,7 +33,7 @@ app.use((request, response, next) => {
 })
 
 
-// ========== ENDPOINTS CRUD - FILMES ==========
+// ========== ENDPOINTS CRUD - FILMES ==========>
 
 //EndPoint que retorna a lista de filmes
 app.get('/v1/locadora/filme', cors(), async (request, response) => {
@@ -96,7 +97,7 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response) 
     
 })
 
-// ========== ENDPOINTS CRUD - GÊNEROS ==========
+// ========== ENDPOINTS CRUD - GÊNEROS ==========>
 
 app.get('/v1/locadora/genero', cors(), async (request, response) => {
     let genero = await controllerGenero.listarGeneros();
@@ -157,6 +158,72 @@ app.delete('/v1/locadora/genero/:id', cors(), async function (request, response)
     
 })
 
+// ========== ENDPOINTS CRUD - CENÁRIOS ==========>
+
+app.get('/v1/locadora/cenario', cors(), async (request, response) => {
+    
+    let cenario = await controllerCenario.listarCenario();
+
+    response.status(cenario.status_code);
+    response.json(cenario);
+})
+
+app.get('/v1/locadora/cenario/:id', cors(), async (request, response) => {
+    let id = request.params.id;
+
+    let cenario = await controllerCenario.buscarCenarioId(id);
+
+    response.status(cenario.status_code);
+    response.json(cenario);
+});
+
+app.post('/v1/locadora/cenario', cors(), bodyParserJSON, async function (request, response){
+    // Recebe o objeto JSON pelo body da requisição
+    let dadosBody = request.body
+
+    // Recebe o content type da requisição
+    let contentType = request.headers['content-type']
+
+    // Chama a função da controller para inserir o filme, enviamos os dados do body e o content-type 
+    let cenario = await controllerCenario.inserirCenario(dadosBody, contentType)
+
+    response.status(cenario.status_code)
+    response.json(cenario)
+
+
+})
+
+app.put('/v1/locadora/cenario/:id', cors(),bodyParserJSON, async function (request, response) {
+    //Recebe os dados do body
+    let dadosBody = request.body
+
+    //Recebe o id do cenario encaminhado pela URL 
+    let idCenario = request.params.id
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //
+    let cenario = await controllerCenario.atualizarCenario(dadosBody, idCenario, contentType)
+
+    response.status(cenario.status_code)
+    response.json(cenario)
+})
+
+app.delete('/v1/locadora/cenario/:id', cors(), async function (request, response) {
+
+    let idCenario = request.params.id
+
+    let filme = await controllerCenario.excluirCenario(idCenario)
+
+    response.status(cenario.status_code)
+    response.json(cenario)
+    
+})
+
+// ========== ENDPOINTS CRUD - PRODUTORA ==========>
+
+    
 /*/////////////////////////////////////////////////////////////////////*/
 
 app.listen(PORT, function() {
