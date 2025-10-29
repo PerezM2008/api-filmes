@@ -7,7 +7,7 @@
  ******************************************************************************************/
 
 //Import do arquivo DAO para manipular o CRUD no DB
-const personagemDAO = require('../../model/DAO/personagem.js');
+const personagemDAO = require('../../model/DAO/personagens.js');
 
 //Import do arquivo que padroniza as mensagens
 const MESSAGE_DEFAULT = require('../module/config_messages.js')

@@ -1,24 +1,24 @@
 /********************************************************************************
  * Objetivo: Arquivo responsável pela realização do CRUD da tabela Genero no Banco de Dados MySQL
- * Data: 22/10/2025
+ * Data: 29/10/2025
  * Autor: Matheus Perez
  * Versão: 1.0
  * 
 ******************************************************************************** */
 
 //import do arquivo 
-const generoDAO = require('../../model/DAO/genero.js');
+const atorDAO = require('../../model/DAO/ator.js');
 
 const MESSAGE_DEFAULT = require('../module/config_messages.js');
 
-//GET - Retorna todos os generos Cadastrados
-const listarGeneros = async () => {
+//GET - Retorna todos os ator Cadastrados
+const listarAtor = async () => {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
         //Variável que chama a função DAO para retornar a lista de generos
-        let result = await generoDAO.getAllGenere();
+        let result = await atorDAO.getAllAtor();
 
         if (result) {
             if (result.length > 0) {
@@ -44,7 +44,7 @@ const listarGeneros = async () => {
 };
 
 //GET - Retorno de um Genero especifico filtrado pelo ID pertencente
-const filtrarGenerosId = async (id) => {
+const filtrarAtorId = async (id) => {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
@@ -54,7 +54,7 @@ const filtrarGenerosId = async (id) => {
             //Preserva o arguemento e o transforma em inteiro
             let idInt = parseInt(id)
 
-            let result = await generoDAO.getFilterByGenereId(idInt);
+            let result = await atorDAO.getFilterByAtorId(idInt);
 
             if (result) {
 
@@ -82,7 +82,7 @@ const filtrarGenerosId = async (id) => {
 };
 
 //UPDATE - Atualizar os generos da tabela pelo Id
-const atualizarGenero = async (genero, id, contentType) => {
+const atualizarAtor = async (Ator, id, contentType) => {
     
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -91,26 +91,26 @@ const atualizarGenero = async (genero, id, contentType) => {
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
             //Chama a função de validação dos dados de cadastro
-            let validarDados = await validarDadosGenero(genero)
+            let validarDados = await validarDadosAtor(Ator)
         
             if(!validarDados){
             
                 //Verifica se o ID existe no BD, caso exista teremos o status 200
-                let validarID = await filtrarGeneroId(id)
+                let validarID = await filtrarAtorId(id)
 
                 if(validarID.status_code == 200) {
 
-                    //chama a funçõa do DAO para atualizar um genero
-                    genero.id = parseInt(id)
+                    //chama a funçõa do DAO para atualizar um Ator
+                    Ator.id = parseInt(id)
 
-                //chama a função do DAO para inserir um novo genero
-                let result = await generoDAO.setUpdateGenere(genero)
+                //chama a função do DAO para inserir um novo Ator
+                let result = await atorDAO.setUpdateAtor(Ator)
 
                     if(result){
                         MESSAGE.HEADER.status       =  MESSAGE.SUCESS_UPDATE_ITEM.status
                         MESSAGE.HEADER.status_code  =  MESSAGE.SUCESS_UPDATE_ITEM.status_code
                         MESSAGE.HEADER.message      =  MESSAGE.SUCESS_UPDATE_ITEM.message
-                        MESSAGE.HEADER.response     =   genero
+                        MESSAGE.HEADER.response     =   Ator
 
 
                         return MESSAGE.HEADER //200
@@ -123,7 +123,7 @@ const atualizarGenero = async (genero, id, contentType) => {
                 }
 
             } else {
-                return validarDados //Retorno da função de validar dados do genero (400)
+                return validarDados //Retorno da função de validar dados do Ator (400)
             }
         }else{
             return MESSAGE.ERROR_CONTENT_TYPE //415
@@ -134,7 +134,7 @@ const atualizarGenero = async (genero, id, contentType) => {
 };
 
 //INSERT - Adiciona um novo Genero na tabela
-const inserirGenero = async (genero, contentType) => {
+const inserirAtor = async (Ator, contentType) => {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -143,25 +143,25 @@ const inserirGenero = async (genero, contentType) => {
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
             //Chama a função de validação dos dados de cadastro
-            let validarDados = await validarDadosGenero(genero)
+            let validarDados = await validarDadosAtor(Ator)
       
             if(!validarDados){
             
-                //chama a função do DAO para inserir um novo genero
-                let result = await generoDAO.setInsertGenere(genero)
+                //chama a função do DAO para inserir um novo Ator
+                let result = await atorDAO.setInsertAtor(Ator)
 
                 if(result){
 
                     //chama a função para receber o ID gerado do BD
-                let lastIdGenere = await generoDAO.getSelectLastIdGenere()
+                let lastIdAtor = await atorDAO.getSelectLastIdAtor()
 
-                if(lastIdGenere){
-                    //Adiciona no JSON de genero o ID que foi gerado pelo BD
-                    genero.id                    =  lastIdGenere
+                if(lastIdAtor){
+                    //Adiciona no JSON de Ator o ID que foi gerado pelo BD
+                    Ator.id                    =  lastIdAtor
                     MESSAGE.HEADER.status       =  MESSAGE.SUCESS_CREATED_ITEM.status
                     MESSAGE.HEADER.status_code  =  MESSAGE.SUCESS_CREATED_ITEM.status_code
                     MESSAGE.HEADER.message      =  MESSAGE.SUCESS_CREATED_ITEM.message
-                    MESSAGE.HEADER.response     =  genero
+                    MESSAGE.HEADER.response     =  Ator
 
                     return MESSAGE.HEADER //201
                 }
@@ -180,16 +180,16 @@ const inserirGenero = async (genero, contentType) => {
     }
 };
 
-//DELETE - Exclui um genero da tabela 
-const excluirGenero = async (id) => {
+//DELETE - Exclui um Ator da tabela 
+const excluirAtor = async (id) => {
     //Retorna a mensagem como um JSON
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
     
-    let validarID = await filtrarGenerosId(id)
+    let validarID = await filtrarAtorId(id)
 
     if(validarID.status_code == 200){
 
-        let result = await generoDAO.setDeleteGenere(id)
+        let result = await atorDAO.setDeleteAtor(id)
 
         if(result){
             MESSAGE.HEADER.status            =   MESSAGE.SUCESS_DELETE_ITEM.status
@@ -203,16 +203,40 @@ const excluirGenero = async (id) => {
     }
 };
 
-const validarDadosGenero = async function (genero) {
+const validarDadosAtor = async function (Ator) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
-    console.log(genero)
+    console.log(Ator)
 
-    if(genero.nome == "" || genero.nome == null || genero.nome == undefined || genero.nome.length > 50){
+    if(Ator.nome == "" || Ator.nome == null || Ator.nome == undefined || Ator.nome.length > 50){
 
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
+
+
+    } else if (Ator.data_nascimento == "" || Ator.data_nascimento == null || Ator.data_nascimento == undefined){
+
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [DATA_NASCIMENTO] inválido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS
+
+
+    } else if (Ator.nascionalidade == "" || Ator.nascionalidade == null || Ator.nascionalidade == undefined || Ator.nascionalidade.length > 150){
+
+    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NASCIONALIDADE] inválido!!!'
+    return MESSAGE.ERROR_REQUIRED_FIELDS
+
+
+    } else if (Ator.cpf == "" || Ator.cpf == null || Ator.cpf == undefined || Ator.cpf.length > 20){
+
+    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CPF] inválido!!!'
+    return MESSAGE.ERROR_REQUIRED_FIELDS
+
+
+    } else if (Ator.tempo_carreira == "" || Ator.tempo_carreira == undefined || Ator.tempo_carreira.length > 150){
+
+    MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!!!'
+    return MESSAGE.ERROR_REQUIRED_FIELDS
 
     } else {
         return false
@@ -223,10 +247,10 @@ const validarDadosGenero = async function (genero) {
 
 module.exports = {
 
-    listarGeneros,
-    filtrarGenerosId,
-    inserirGenero,
-    atualizarGenero,
-    excluirGenero,
-    validarDadosGenero
+    listarAtor,
+    filtrarAtorId,
+    inserirAtor,
+    atualizarAtor,
+    excluirAtor,
+    validarDadosAtor
 }

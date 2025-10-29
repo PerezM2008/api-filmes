@@ -15,9 +15,10 @@ const bodyParserJSON = bodyParser.json()
 
 // ========== IMPORT'S CONTROLLER'S ==========
 //Controller Filme
-const controllerFilme   = require('./controller/personagem/controller_filme.js')
+const controllerFilme   = require('./controller/filme/controller_filme.js')
 const controllerGenero  = require('./controller/genero/controller_genero.js')
 const controllerCenario = require('./controller/cenario/controller_cenario.js')
+const controllerPersonagem = require('./controller/personagens/controller_personagens.js')
 
 // ============ CONFIGURAÇÕA DA PORTA DE SAIDA ==============
 
@@ -36,7 +37,7 @@ app.use((request, response, next) => {
 // ========== ENDPOINTS CRUD - FILMES ==========>
 
 //EndPoint que retorna a lista de filmes
-app.get('/v1/locadora/personagem', cors(), async (request, response) => {
+app.get('/v1/locadora/filme', cors(), async (request, response) => {
     let filmes = await controllerFilme.listarFilmes();
 
     response.status(filmes.status_code);
@@ -44,16 +45,17 @@ app.get('/v1/locadora/personagem', cors(), async (request, response) => {
 });
 
 //EndPoint que retorna um personagem filtrando pelo ID
-app.get('/v1/locadora/personagem/:id', cors(), async (request, response) => {
+app.get('/v1/locadora/filme/:id', cors(), async (request, response) => {
     let id = request.params.id;
 
-    let personagem = await controllerFilme.buscarFilmeId(id);
+    let filme = await controllerFilme.buscarFilmeId(id);
 
-    response.status(personagem.status_code);
-    response.json(personagem);
+    response.status(filme.status_code);
+    response.json(filme);
 });
 
-app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response){
+// POST - Cria recursos novos
+app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, response){
     // Recebe o objeto JSON pelo body da requisição
     let dadosBody = request.body
 
@@ -61,39 +63,39 @@ app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (requ
     let contentType = request.headers['content-type']
 
     // Chama a função da controller para inserir o personagem, enviamos os dados do body e o content-type 
-    let personagem = await controllerFilme.inserirFilme(dadosBody, contentType)
+    let filme = await controllerFilme.inserirFilme(dadosBody, contentType)
 
-    response.status(personagem.status_code)
-    response.json(personagem)
+    response.status(filme.status_code)
+    response.json(filme)
 
 
 })
-
-app.put('/v1/locadora/personagem/:id', cors(),bodyParserJSON, async function (request, response) {
+// PUT - update modifica um recurso já existente 
+app.put('/v1/locadora/filme/:id', cors(),bodyParserJSON, async function (request, response) {
     //Recebe os dados do body
     let dadosBody = request.body
 
     //Recebe o id do personagem encaminhado pela URL 
-    let idPersonagem = request.params.id
+    let idFilme = request.params.id
 
     //Recebe o content-type da requisição
     let contentType = request.headers['content-type']
 
     //
-    let personagem = await controllerFilme.atualizarFilme(dadosBody, idPersonagem, contentType)
+    let filme = await controllerFilme.atualizarFilme(dadosBody, idFilme, contentType)
 
-    response.status(personagem.status_code)
-    response.json(personagem)
+    response.status(filme.status_code)
+    response.json(filme)
 })
 
-app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+app.delete('/v1/locadora/filmes/:id', cors(), async function (request, response) {
 
-    let idPersonagem = request.params.id
+    let idFilme = request.params.id
 
-    let personagem = await controllerFilme.excluirFilme(idPersonagem)
+    let filmes = await controllerFilme.excluirFilme(idFilme)
 
-    response.status(personagem.status_code)
-    response.json(personagem)
+    response.status(filmes.status_code)
+    response.json(filmes)
     
 })
 
@@ -223,7 +225,7 @@ app.delete('/v1/locadora/cenario/:id', cors(), async function (request, response
 
 // ========== ENDPOINTS CRUD - PERSONAGEM ==========>
 
-    app.get('/v1/locadora/personagem', cors(), async (request, response) => {
+app.get('/v1/locadora/personagem', cors(), async (request, response) => {
     let personagem = await controllerPersonagem.listarPersonagem();
 
     response.status(personagem.status_code);
@@ -283,6 +285,68 @@ app.delete('/v1/locadora/personagem/:id', cors(), async function (request, respo
     response.json(personagem)
     
 })
+
+// ========== ENDPOINTS CRUD - ATOR ==========>
+
+    app.get('/v1/locadora/ator', cors(), async (request, response) => {
+        let ator = await controllerAtor.listarAtor();
+    
+        response.status(ator.status_code);
+        response.json(ator);
+    
+    });
+    
+    app.get('/v1/locadora/ator/:id', cors(), async (request, response) => {
+        let id = request.params.id;
+    
+        let ator = await controllerAtor.filtrarAtorId(id);
+    
+        response.status(ator.status_code);
+        response.json(ator);
+    });
+    
+    app.post('/v1/locadora/ator', cors(), bodyParserJSON, async function (request, response){
+        // Recebe o objeto JSON pelo body da requisição
+        let dadosBody = request.body
+    
+        // Recebe o content type da requisição
+        let contentType = request.headers['content-type']
+    
+        // Chama a função da controller para inserir o personagem, enviamos os dados do body e o content-type 
+        let ator = await controllerAtor.inserirAtor(dadosBody, contentType)
+    
+        response.status(ator.status_code)
+        response.json(ator)
+    });
+    
+    app.put('/v1/locadora/ator/:id', cors(),bodyParserJSON, async function (request, response) {
+        //Recebe os dados do body
+        let dadosBody = request.body
+    
+        //Recebe o id do personagem encaminhado pela URL 
+        let idAtor = request.params.id
+    
+        //Recebe o content-type da requisição
+        let contentType = request.headers['content-type']
+    
+        //
+        let ator = await controllerAtor.atualizarAtor(dadosBody, idAtor, contentType)
+    
+        response.status(ator.status_code)
+        response.json(ator)
+    });
+    
+    app.delete('/v1/locadora/ator/:id', cors(), async function (request, response) {
+    
+        let idAtor = request.params.id
+    
+        let ator = await controllerAtor.excluirAtor(idAtor)
+    
+        response.status(ator.status_code)
+        response.json(ator)
+        
+    })
+    
     
 /*/////////////////////////////////////////////////////////////////////*/
 

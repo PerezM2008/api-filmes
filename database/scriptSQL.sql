@@ -83,3 +83,34 @@ values ("Celso Mussumano", "02-07-1678", "Rio de Janeiro")
 
 insert into tbl_personagens(nome, data_idade, localidade)
 values ("Kishura Muytu", "09-10-2019", "Japão")
+
+
+-- Criação da tabela Diretor
+CREATE TABLE tbl_diretor(
+    id_diretor INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nome VARCHAR (50) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    nacionalidade VARCHAR (150) NOT NULL,
+    cpf VARCHAR (15) NOT NULL,
+    tempo_carreira VARCHAR (150) NULL
+);
+
+-- Criação da tabela Ator
+CREATE TABLE tbl_ator (
+    id_ator INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nome VARCHAR (50) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    nascionalidade VARCHAR (150) NOT NULL,
+    cpf VARCHAR (15) NOT NULL,
+    tempo_carreira VARCHAR (150) NULL
+);
+
+-- Criação da tabela Produtora
+CREATE TABLE tbl_produtora (
+    id_produtora INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nome VARCHAR (50) NOT NULL,
+    email VARCHAR (100) NOT NULL,
+    nascionalidade VARCHAR (150) NOT NULL,
+    cnpj VARCHAR (20) NOT NULL,
+    data_fundacao DATE NULL
+);
