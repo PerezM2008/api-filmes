@@ -347,7 +347,70 @@ app.delete('/v1/locadora/personagem/:id', cors(), async function (request, respo
         
     })
     
+
+// ========== ENDPOINTS CRUD - PRODUTORA =========>
+
+app.get('/v1/locadora/produtora', cors(), async (request, response) => {
+    let produtora = await controllerProdutora.listarProdutora();
+
+    response.status(produtora.status_code);
+    response.json(produtora);
+});
+
+//EndPoint que retorna um personagem filtrando pelo ID
+app.get('/v1/locadora/produtora/:id', cors(), async (request, response) => {
+    let id = request.params.id;
+
+    let produtora = await controllerProdutora.buscarProdutoraId(id);
+
+    response.status(produtora.status_code);
+    response.json(produtora);
+});
+
+// POST - Cria recursos novos
+app.post('/v1/locadora/produtora', cors(), bodyParserJSON, async function (request, response){
+    // Recebe o objeto JSON pelo body da requisição
+    let dadosBody = request.body
+
+    // Recebe o content type da requisição
+    let contentType = request.headers['content-type']
+
+    // Chama a função da controller para inserir o personagem, enviamos os dados do body e o content-type 
+    let produtora = await controllerProdutora.inserirProdutora(dadosBody, contentType)
+
+    response.status(produtora.status_code)
+    response.json(produtora)
+
+
+})
+// PUT - update modifica um recurso já existente 
+app.put('/v1/locadora/produtora/:id', cors(),bodyParserJSON, async function (request, response) {
+    //Recebe os dados do body
+    let dadosBody = request.body
+
+    //Recebe o id do personagem encaminhado pela URL 
+    let idProdutora = request.params.id
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //
+    let produtora = await controllerProdutora.atualizarProdutora(dadosBody, idProdutora, contentType)
+
+    response.status(produtora.status_code)
+    response.json(produtora)
+})
+
+app.delete('/v1/locadora/produtora/:id', cors(), async function (request, response) {
+
+    let idProdutora = request.params.id
+
+    let produtora = await controllerProdutora.excluirProdutora(idProdutora)
+
+    response.status(produtora.status_code)
+    response.json(produtora)
     
+})
 /*/////////////////////////////////////////////////////////////////////*/
 
 app.listen(PORT, function() {
