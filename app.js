@@ -10,15 +10,20 @@ const express    = require('express');
 const cors       = require('cors');
 const bodyParser = require('body-parser');
 
+//Import das Rotas
+const filmeRoutes = require('./routes/routesFilmes.js');
+
 //Cria um objeto especialista no formato JSON para receber os dados do body (POST e PUT)
 const bodyParserJSON = bodyParser.json()
 
 // ========== IMPORT'S CONTROLLER'S ==========
 //Controller Filme
-const controllerFilme   = require('./controller/filme/controller_filme.js')
-const controllerGenero  = require('./controller/genero/controller_genero.js')
-const controllerCenario = require('./controller/cenario/controller_cenario.js')
-const controllerPersonagem = require('./controller/personagens/controller_personagens.js')
+const controllerFilme        = require('./controller/filme/controller_filme.js')
+const controllerGenero       = require('./controller/genero/controller_genero.js')
+const controllerCenario      = require('./controller/cenario/controller_cenario.js')
+const controllerPersonagem   = require('./controller/personagens/controller_personagens.js')
+const controllerAtor         = require('./controller/ator/controller_ator.js')
+const controllerProdutora    = require('./controller/produtora/controller_produtora.js')
 
 // ============ CONFIGURAÇÕA DA PORTA DE SAIDA ==============
 
@@ -98,6 +103,8 @@ app.delete('/v1/locadora/filmes/:id', cors(), async function (request, response)
     response.json(filmes)
     
 })
+
+app.use('', cors(), filmeRoutes)
 
 // ========== ENDPOINTS CRUD - GÊNEROS ==========>
 
@@ -216,7 +223,7 @@ app.delete('/v1/locadora/cenario/:id', cors(), async function (request, response
 
     let idCenario = request.params.id
 
-    let personagem = await controllerCenario.excluirCenario(idCenario)
+    let cenario = await controllerCenario.excluirCenario(idCenario)
 
     response.status(cenario.status_code)
     response.json(cenario)

@@ -21,7 +21,7 @@ const listarCenario = async () => {
 
     try {
         //Chama a função do DAO para retornar a lista de filmes
-        let result = await cenarioDAO.getAllCenario();
+        let result = await cenarioDAO.getAllScenario();
 
         if (result) {
             if (result.length > 0) {
@@ -108,8 +108,9 @@ const inserirCenario = async (cenario, contentType) => {
                 let lastIdScenario = await cenarioDAO.getSelectLastIdScenario()
 
                 if(lastIdScenario){
+                    console.log(lastIdScenario)
                     //Adiciona no JSON de filme o ID que foi gerado pelo BD
-                    cenario.id                    =  lastIdScenario
+                    cenario.id                  =  lastIdScenario
                     MESSAGE.HEADER.status       =  MESSAGE.SUCESS_CREATED_ITEM.status
                     MESSAGE.HEADER.status_code  =  MESSAGE.SUCESS_CREATED_ITEM.status_code
                     MESSAGE.HEADER.message      =  MESSAGE.SUCESS_CREATED_ITEM.message
@@ -127,7 +128,7 @@ const inserirCenario = async (cenario, contentType) => {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
     } catch(error) {
-        console.log(error)
+        
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 };
@@ -214,13 +215,12 @@ const validarDadosCenario = async function (cenario) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
-    console.log(cenario)
     if(cenario.nome == "" || cenario.nome == null || cenario.nome == undefined || cenario.nome.length > 150){
 
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
-    } if (cenario.localidade == "" || cenario.localidade == null || cenario.localidade == undefined || cenario.localidade.length < 200){
+    } else if (cenario.localidade == "" || cenario.localidade == null || cenario.localidade == undefined || cenario.localidade.length > 200){
 
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [LOCALIDADE] inválido'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400

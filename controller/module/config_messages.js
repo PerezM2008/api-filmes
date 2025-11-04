@@ -30,13 +30,13 @@ const ERROR_NOT_FOUND = {
 const ERROR_INTERNAL_SERVER_MODEL = {
     status: false,
     status_code: 500,
-    message: 'Não foi possível processar a requisição devido a problemas na cadama de MODELAGEM de dados!'
+    message: 'Não foi possível processar a requisição devido a problemas na camada de MODELAGEM de dados!'
 };
 
 const ERROR_INTERNAL_SERVER_CONTROLLER = {
     status: false,
     status_code: 500,
-    message: 'Não foi possível processar a requisição devido a problemas na cadama de CONTROLE de dados!'
+    message: 'Não foi possível processar a requisição devido a problemas na camada de CONTROLE de dados!'
 };
 
 const ERROR_REQUIRED_FIELDS = {

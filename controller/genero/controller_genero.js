@@ -96,7 +96,7 @@ const atualizarGenero = async (genero, id, contentType) => {
             if(!validarDados){
             
                 //Verifica se o ID existe no BD, caso exista teremos o status 200
-                let validarID = await filtrarGeneroId(id)
+                let validarID = await filtrarGenerosId(id)
 
                 if(validarID.status_code == 200) {
 
@@ -105,7 +105,8 @@ const atualizarGenero = async (genero, id, contentType) => {
 
                 //chama a função do DAO para inserir um novo genero
                 let result = await generoDAO.setUpdateGenere(genero)
-
+                console.log(result)
+                
                     if(result){
                         MESSAGE.HEADER.status       =  MESSAGE.SUCESS_UPDATE_ITEM.status
                         MESSAGE.HEADER.status_code  =  MESSAGE.SUCESS_UPDATE_ITEM.status_code
@@ -129,6 +130,7 @@ const atualizarGenero = async (genero, id, contentType) => {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }       
     } catch (error) {
+        
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 };

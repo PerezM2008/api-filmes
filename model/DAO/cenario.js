@@ -66,9 +66,9 @@ const setInsertScenario = async (cenario) => {
             if (result)
                 return true
             else (error)
-            return false
+                return false
         } catch (error){
-
+                return error
         }    
 };
 
@@ -76,7 +76,7 @@ const setInsertScenario = async (cenario) => {
 const setUpdateScenario = async(cenario) => {
     try {
         let sql = `update tbl_cenario set
-                        nome             =   '${cenario .nome}'
+                        nome             =   '${cenario.nome}',
                         localidade       =   '${cenario.localidade}'
                         where id         =    ${cenario.id}`
 
