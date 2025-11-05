@@ -11,7 +11,7 @@ const cors       = require('cors');
 const bodyParser = require('body-parser');
 
 //Import das Rotas
-const filmeRoutes = require('./routes/routesFilmes.js');
+//const filmeRoutes = require('./routes/routesFilmes.js');
 
 //Cria um objeto especialista no formato JSON para receber os dados do body (POST e PUT)
 const bodyParserJSON = bodyParser.json()
@@ -104,7 +104,7 @@ app.delete('/v1/locadora/filmes/:id', cors(), async function (request, response)
     
 })
 
-app.use('', cors(), filmeRoutes)
+//app.use('', cors(), filmeRoutes)
 
 // ========== ENDPOINTS CRUD - GÊNEROS ==========>
 

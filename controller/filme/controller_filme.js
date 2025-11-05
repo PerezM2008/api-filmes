@@ -9,6 +9,9 @@
 //Import do arquivo DAO para manipular o CRUD no DB
 const filmeDAO = require('../../model/DAO/filme.js');
 
+//Import da controller Filme Genero
+const controllerFilmeGenero = require('./controller_filme_genero.js')
+
 //Import do arquivo que padroniza as mensagens
 const MESSAGE_DEFAULT = require('../module/config_messages.js')
 
@@ -108,6 +111,21 @@ const inserirFilme = async (filme, contentType) => {
                 let lastIdFilme = await filmeDAO.getSelectLastIdFilms()
 
                 if(lastIdFilme){
+
+                    //Processamento para inserir dados na tabela de relação entre filme e genero
+
+                    //repetição para pegar cada genero e enviar para o DAO do filmeGenero
+                    filme.genero.forEach(async function(genero){
+                        let filmeGenero = {
+                                            id_filmes: lastIdFilme,
+                                            id_genero: genero.id
+                                          }
+
+                        let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+                    
+                       
+                    })
+
                     //Adiciona no JSON de filme o ID que foi gerado pelo BD
                     filme.id                    =  lastIdFilme
                     MESSAGE.HEADER.status       =  MESSAGE.SUCESS_CREATED_ITEM.status
@@ -214,7 +232,7 @@ const validarDadosFilme = async function (filme) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
-    console.log(filme)
+    // console.log(filme)
     if(filme.nome == "" || filme.nome == null || filme.nome == undefined || filme.nome.length > 100){
 
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!!!'

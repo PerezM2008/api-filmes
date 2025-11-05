@@ -5,6 +5,6 @@
  * Versão: 1.0
  ******************************************************************************************/
 
-const Router        = require('express')
-const router        = Router();
+// const Router        = require('express')
+// const router        = Router();
 
