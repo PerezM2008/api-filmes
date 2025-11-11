@@ -29,7 +29,7 @@ const listarFilmesGeneros = async () => {
 
                 MESSAGE.HEADER.status = MESSAGE.REQUEST_SUCESS.status;
                 MESSAGE.HEADER.status_code = MESSAGE.REQUEST_SUCESS.status_code;
-                MESSAGE.HEADER.response.amount = result;
+                MESSAGE.HEADER.response.filmeGenero = result;
 
                 return MESSAGE.HEADER; //200
             } else {
@@ -63,7 +63,7 @@ const buscarFilmeGeneroId = async (id) => {
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.REQUEST_SUCESS.status;
                     MESSAGE.HEADER.status_code = MESSAGE.REQUEST_SUCESS.status_code;
-                    MESSAGE.HEADER.response.movie = result;
+                    MESSAGE.HEADER.response.filmeGenero = result;
 
                     return MESSAGE.HEADER; //200
                 } else {
@@ -96,14 +96,14 @@ const listarGenerosIdFilme = async (idFilme) => {
 
 
             //Guarda o resultado da função que filtra pelo ID
-            let result = await filmeGenresDAO.getSelectGenresByIdFilm(idInt);
+            let result = await filmeGeneroDAO.getSelectGenresByIdFilms(idInt);
 
             if (result) {
 
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.REQUEST_SUCESS.status;
                     MESSAGE.HEADER.status_code = MESSAGE.REQUEST_SUCESS.status_code;
-                    MESSAGE.HEADER.response.movie = result;
+                    MESSAGE.HEADER.response.filmeGenero = result;
 
                     return MESSAGE.HEADER; //200
                 } else {
@@ -143,7 +143,7 @@ const listarFilmeIdGenero = async (idGenero) => {
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.REQUEST_SUCESS.status;
                     MESSAGE.HEADER.status_code = MESSAGE.REQUEST_SUCESS.status_code;
-                    MESSAGE.HEADER.response.movie = result;
+                    MESSAGE.HEADER.response.filmeGenero = result;
 
                     return MESSAGE.HEADER; //200
                 } else {
@@ -185,7 +185,7 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
 
                     //chama a função para receber o ID gerado do BD
                     let lastIdFilmeGenero = await filmeGeneroDAO.getSelectLastIdFilmsGenre()
-
+                    
                     if (lastIdFilmeGenero) {
                         //Adiciona no JSON de filmeGenero o ID que foi gerado pelo BD
                         filmeGenero.id = lastIdFilmeGenero
@@ -197,7 +197,7 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
                         return MESSAGE.HEADER //201
                     }
                 } else {
-                    console.log("aaa")
+                    
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                 }
             } else {

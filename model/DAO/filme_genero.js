@@ -54,19 +54,19 @@ const getSelectByIdFilmsGenre = async (id) => {
         return false;
     }
 };
-
+//getSelectGenresByIdFilm
 //Retorna os generos filtrando pelo ID do filme
 const getSelectGenresByIdFilms = async (idFilme) => {
     try {
         //Script SQL
         let sql = `select tbl_genero.id, tbl_genero.nome
-         from tbl_filme
-                inner join tbl_filmes_genero
-                    on tbl_filme.id = tbl_filme_genero.id_filme
+         from tbl_filmes
+                inner join tbl_filme_genero
+                    on tbl_filmes.id = tbl_filme_genero.id_filmes
                 inner join tbl_genero
-                    on tbl_genero.id = tbl_filme_genero.id
-            where tbl_filme.id = ${idFilme}`
-
+                    on tbl_genero.id = tbl_filme_genero.id_genero
+            where tbl_filmes.id = ${idFilme}`
+       
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
 
@@ -91,7 +91,7 @@ const getSelectFilmsByIdGenres = async (idGenero) => {
                 inner join tbl_filmes_genero
                     on tbl_filme.id = tbl_filme_genero.id_filme
                 inner join tbl_genero
-                    on tbl_genero.id = tbl_filme_genero.id
+                    on tbl_genero.id = tbl_filme_genero.id_genero
             where tbl_genero.id = ${idGenero}`
 
         //Executa no DB o script SQL
@@ -109,11 +109,11 @@ const getSelectFilmsByIdGenres = async (idGenero) => {
     }
 };
 
-//
+//getSelectGenresByIdFilm
 const getSelectLastIdFilmsGenre = async() => {
     try {
         //Script SQL
-        let sql = `select * from tbl_filmes_genero order by id desc`;
+        let sql = `select * from tbl_filme_genero order by id desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -137,7 +137,7 @@ const setInsertFilmsGenre = async (filmeGenero) => {
         let sql = `INSERT INTO tbl_filme_genero (id_filmes, id_genero)
         values (${filmeGenero.id_filmes}, ${filmeGenero.id_genero})`
                
-console.log(sql)
+
         // $executeRawUnsafe() ->  Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
 
