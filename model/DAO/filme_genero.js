@@ -66,7 +66,7 @@ const getSelectGenresByIdFilms = async (idFilme) => {
                 inner join tbl_genero
                     on tbl_genero.id = tbl_filme_genero.id_genero
             where tbl_filmes.id = ${idFilme}`
-       
+
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
 
@@ -110,7 +110,7 @@ const getSelectFilmsByIdGenres = async (idGenero) => {
 };
 
 //getSelectGenresByIdFilm
-const getSelectLastIdFilmsGenre = async() => {
+const getSelectLastIdFilmsGenre = async () => {
     try {
         //Script SQL
         let sql = `select * from tbl_filme_genero order by id desc`;
@@ -136,7 +136,7 @@ const setInsertFilmsGenre = async (filmeGenero) => {
     try {
         let sql = `INSERT INTO tbl_filme_genero (id_filmes, id_genero)
         values (${filmeGenero.id_filmes}, ${filmeGenero.id_genero})`
-               
+
 
         // $executeRawUnsafe() ->  Permite apenas executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
@@ -145,7 +145,7 @@ const setInsertFilmsGenre = async (filmeGenero) => {
             return true
         else (error)
         return false
-    } catch (error){
+    } catch (error) {
 
     }
 
@@ -153,9 +153,9 @@ const setInsertFilmsGenre = async (filmeGenero) => {
 
 //Atualiza um filme existente no DB filtrando pelo ID
 const setUpdateFilmsGenre = async (filmeGenero) => {
-    
+
     try {
-        let sql = `update tbl_filmes_genero set
+        let sql = `update tbl_filme_genero set
                         id_filme            =   ${filmeGenero.id_filme},
                         id_genero           =   ${filmeGenero.id_genero}
                         
@@ -168,9 +168,10 @@ const setUpdateFilmsGenre = async (filmeGenero) => {
         if (result)
             return true
         else (error)
-        return false
-    } catch (error){
+            return false
 
+    } catch (error) {
+        return error
     }
 };
 
@@ -178,18 +179,18 @@ const setUpdateFilmsGenre = async (filmeGenero) => {
 const setDeleteFilmsGenre = async function (id) {
 
     try {
-        let sql = `DELETE FROM tbl_filmes_genero where id = ${id}`
+        let sql = `DELETE FROM tbl_filme_genero where id = ${id}`
 
-            let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
-            if(result){
-                return true
-            } else {
-                return false
-            }
+        if (result) {
+            return true
+        } else {
+            return false
+        }
 
-    } catch (error){
-
+    } catch (error) {
+        return error
     }
 };
 

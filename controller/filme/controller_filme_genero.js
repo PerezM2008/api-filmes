@@ -56,7 +56,7 @@ const buscarFilmeGeneroId = async (id) => {
 
 
             //Guarda o resultado da função que filtra pelo ID
-            let result = await filmeDAO.getSelectByIdFilms(idInt);
+            let result = await filmeGeneroDAO.getSelectByIdFilms(idInt);
 
             if (result) {
 
@@ -75,11 +75,11 @@ const buscarFilmeGeneroId = async (id) => {
                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
             }
         } else {
-            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido!!!'
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido! CONTROLE filme_genero.'
             return MESSAGE.ERROR_REQUIRED_FIELDS; //400
         }
     } catch (error) {
-
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -267,17 +267,19 @@ const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
 
 //Exclui um filmeGenero filtrando pelo ID
 const excluirFilmeGenero = async (id) => {
-
+    
     //Retorna a mensagem como um JSON
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     let validarID = await buscarFilmeGeneroId(id)
-
+    console.log(validarID)
     if (validarID.status_code == 200) {
-
+        console.log('uj')
         let result = await filmeGeneroDAO.setDeleteFilmsGenre(id)
-
+            console.log(result)
         if (result) {
+            console.log(result)
+
             MESSAGE.HEADER.status = MESSAGE.SUCESS_DELETE_ITEM.status
             MESSAGE.HEADER.status_code = MESSAGE.SUCESS_DELETE_ITEM.status_code
             MESSAGE.HEADER.message = MESSAGE.SUCESS_DELETE_ITEM.message
@@ -286,6 +288,7 @@ const excluirFilmeGenero = async (id) => {
 
             return MESSAGE.HEADER //200
         } else {
+            console.log(result)
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
         }
     }

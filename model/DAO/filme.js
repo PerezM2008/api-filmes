@@ -174,7 +174,7 @@ const setUpdateFilms = async (filme) => {
         else (error)
         return false
     } catch (error){
-
+        return false
     }
 };
 

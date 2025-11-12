@@ -30,13 +30,13 @@ const listarFilmes = async () => {
             console
             if (result.length > 0) {
 
-                for(filme of result){
+                for (filme of result) {
 
                     let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
                     console.log(resultGeneros)
 
-                    if(resultGeneros.status_code == 200) //É a tratativa que ve se o filme tem um genero
-                    filme.genero = resultGeneros.response.filmeGenero
+                    if (resultGeneros.status_code == 200) //É a tratativa que ve se o filme tem um genero
+                        filme.genero = resultGeneros.response.filmeGenero
                 }
 
                 let amount = result.length;
@@ -55,7 +55,7 @@ const listarFilmes = async () => {
         };
 
     } catch (error) {
-       
+
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -66,7 +66,7 @@ const buscarFilmeId = async (id) => {
 
     try {
         //Validação de campo obrigatório
-        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
+        if (id != '' && id != null && id != undefined && !isNaN(id)) {
             //Preserva o argumento e o transforma em inteiro
             let idInt = parseInt(id);
 
@@ -77,6 +77,17 @@ const buscarFilmeId = async (id) => {
             if (result) {
 
                 if (result.length > 0) {
+
+                    for (filme of result) {
+
+                        let resultFilmeId = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
+                        console.log(resultFilmeId)
+
+                        if (resultFilmeId.status_code == 200)
+                            filme.genero = resultFilmeId.response.filmeGenero
+
+                    }
+
                     MESSAGE.HEADER.status = MESSAGE.REQUEST_SUCESS.status;
                     MESSAGE.HEADER.status_code = MESSAGE.REQUEST_SUCESS.status_code;
                     MESSAGE.HEADER.response.movie = result;
@@ -91,11 +102,11 @@ const buscarFilmeId = async (id) => {
                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL; //500
             }
         } else {
-            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido!!!'
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido!'
             return MESSAGE.ERROR_REQUIRED_FIELDS; //400
         }
     } catch (error) {
-       
+
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER; //500
     }
 };
@@ -107,74 +118,74 @@ const inserirFilme = async (filme, contentType) => {
 
     try {
 
-        if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
             //Chama a função de validação dos dados de cadastro
             let validarDados = await validarDadosFilme(filme)
-      
-            if(!validarDados){
-            
+
+            if (!validarDados) {
+
                 //chama a função do DAO para inserir um novo filme
                 let result = await filmeDAO.setInsertFilms(filme)
 
-                if(result){
+                if (result) {
 
                     //chama a função para receber o ID gerado do BD
-                let lastIdFilme = await filmeDAO.getSelectLastIdFilms()
+                    let lastIdFilme = await filmeDAO.getSelectLastIdFilms()
 
-                if(lastIdFilme){
+                    if (lastIdFilme) {
 
-                    //Processamento para inserir dados na tabela de relação entre filme e genero
+                        //Processamento para inserir dados na tabela de relação entre filme e genero
 
-                    //repetição para pegar cada genero e enviar para o DAO do filmeGenero
-                    //filme.genero.forEach(async function(genero){
-                    for(genero of filme.genero){
-                        let filmeGenero = {
-                                            id_filmes: lastIdFilme,
-                                            id_genero: genero.id
-                                          }
+                        //repetição para pegar cada genero e enviar para o DAO do filmeGenero
+                        //filme.genero.forEach(async function(genero){
+                        for (genero of filme.genero) {
+                            let filmeGenero = {
+                                id_filmes: lastIdFilme,
+                                id_genero: genero.id
+                            }
 
-                        let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
-                    
-                        if(resultFilmeGenero.status_code != 201){
-                            return MESSAGE.ERROR_RELATION_TABLE //200 - erro na tabela relacionamento 
+                            let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+
+                            if (resultFilmeGenero.status_code != 201) {
+                                return MESSAGE.ERROR_RELATION_TABLE //200 - erro na tabela relacionamento 
+                            }
+
                         }
-                       
+
+                        //Adiciona no JSON de filme o ID que foi gerado pelo BD
+                        filme.id = lastIdFilme
+                        MESSAGE.HEADER.status = MESSAGE.SUCESS_CREATED_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCESS_CREATED_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCESS_CREATED_ITEM.message
+
+                        // Processsamento para trazer dados dos generos cadastrados na tabela de relação
+
+                        delete filme.genero
+
+                        let resultGeneroFilme = await controllerFilmeGenero.listarGenerosIdFilme(lastIdFilme)
+
+
+
+                        // Adiciona novamente o atributo genreo com todas as informaçoes do genero (ID, Nome)
+                        filme.genero = resultGeneroFilme.response.filmeGenero
+
+
+
+                        MESSAGE.HEADER.response = filme
+
+                        return MESSAGE.HEADER //201
                     }
-
-                    //Adiciona no JSON de filme o ID que foi gerado pelo BD
-                    filme.id                    =  lastIdFilme
-                    MESSAGE.HEADER.status       =  MESSAGE.SUCESS_CREATED_ITEM.status
-                    MESSAGE.HEADER.status_code  =  MESSAGE.SUCESS_CREATED_ITEM.status_code
-                    MESSAGE.HEADER.message      =  MESSAGE.SUCESS_CREATED_ITEM.message
-
-                    // Processsamento para trazer dados dos generos cadastrados na tabela de relação
-
-                    delete filme.genero
-
-                    let resultGeneroFilme = await controllerFilmeGenero.listarGenerosIdFilme(lastIdFilme)
-
-                    
-                    
-                    // Adiciona novamente o atributo genreo com todas as informaçoes do genero (ID, Nome)
-                    filme.genero = resultGeneroFilme.response.filmeGenero
-
-
-
-                    MESSAGE.HEADER.response     =  filme
-
-                    return MESSAGE.HEADER //201
-                }
-                }else{
+                } else {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                 }
             } else {
                 return validarDados //400
             }
-        }else{
+        } else {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
-    } catch(error) {
+    } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 };
@@ -187,47 +198,77 @@ const atualizarFilme = async (filme, id, contentType) => {
     try {
 
         //Valida o ContentType
-        if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
             //Chama a função de validação dos dados de cadastro
             let validarDados = await validarDadosFilme(filme)
-      
-            if(!validarDados){
-            
+
+            if (!validarDados) {
+
                 //Verifica se o ID existe no BD, caso exista teremos o status 200
                 let validarID = await buscarFilmeId(id)
 
-                if(validarID.status_code == 200) {
+                if (validarID.status_code == 200) {
 
                     //chama a funçõa do DAO para atualizar um filme
                     filme.id = parseInt(id)
 
-                //chama a função do DAO para inserir um novo filme
-                let result = await filmeDAO.setUpdateFilms(filme)
+                    //chama a função do DAO para inserir um novo filme
+                    let result = await filmeDAO.setUpdateFilms(filme)
+                    
+                    if (result) {
+                        
+                        let resultDelete = await controllerFilmeGenero.excluirFilmeGenero(id)
+                        if(resultDelete){
+                            return resultDelete
+                        }
 
-                    if(result){
-                        MESSAGE.HEADER.status       =  MESSAGE.SUCESS_UPDATE_ITEM.status
-                        MESSAGE.HEADER.status_code  =  MESSAGE.SUCESS_UPDATE_ITEM.status_code
-                        MESSAGE.HEADER.message      =  MESSAGE.SUCESS_UPDATE_ITEM.message
-                        MESSAGE.HEADER.response     =   filme
+                        
+
+                        for (genero of filme.genero) {
+                            let filmeGenero = {
+                                id_filmes: lastIdFilme,
+                                id_genero: genero.id
+                            }
+
+                            let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+
+                            if (resultFilmeGenero.status_code != 201) {
+                                return MESSAGE.ERROR_RELATION_TABLE //200 - erro na tabela relacionamento 
+                            }
+
+                        }
+
+                        delete filme.genero
+
+                        let resultGeneroFilme = await controllerFilmeGenero.listarGenerosIdFilme(lastIdFilme)
+
+                        // Adiciona novamente o atributo genreo com todas as informaçoes do genero (ID, Nome)
+                        filme.genero = resultGeneroFilme.response.filmeGenero
+
+
+                        MESSAGE.HEADER.status = MESSAGE.SUCESS_UPDATE_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCESS_UPDATE_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCESS_UPDATE_ITEM.message
+                        MESSAGE.HEADER.response = filme
 
 
                         return MESSAGE.HEADER //200
 
-                    }else{
+                    } else {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                     }
-                }else{
+                } else {
                     return validarID //Retorno da Função de buscarFilmeID (400 ou 404 ou 500)
                 }
 
             } else {
                 return validarDados //Retorno da função de validar dados do Filme (400)
             }
-        }else{
+        } else {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
-    } catch(error) {
+    } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 };
@@ -237,17 +278,17 @@ const excluirFilme = async (id) => {
 
     //Retorna a mensagem como um JSON
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
-    
+
     let validarID = await buscarFilmeId(id)
 
-    if(validarID.status_code == 200){
+    if (validarID.status_code == 200) {
 
         let result = await filmeDAO.setDeleteFilms(id)
 
-        if(result){
-            MESSAGE.HEADER.status            =   MESSAGE.SUCESS_DELETE_ITEM.status
-            MESSAGE.HEADER.status_code       =   MESSAGE.SUCESS_DELETE_ITEM.status_code
-            MESSAGE.HEADER.message           =   MESSAGE.SUCESS_DELETE_ITEM.message
+        if (result) {
+            MESSAGE.HEADER.status = MESSAGE.SUCESS_DELETE_ITEM.status
+            MESSAGE.HEADER.status_code = MESSAGE.SUCESS_DELETE_ITEM.status_code
+            MESSAGE.HEADER.message = MESSAGE.SUCESS_DELETE_ITEM.message
 
             return MESSAGE.HEADER //200
         } else {
@@ -262,39 +303,39 @@ const validarDadosFilme = async function (filme) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     // console.log(filme)
-    if(filme.nome == "" || filme.nome == null || filme.nome == undefined || filme.nome.length > 100){
+    if (filme.nome == "" || filme.nome == null || filme.nome == undefined || filme.nome.length > 100) {
 
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [NOME] inválido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
-    } else if (filme.sinopse == undefined){
+    } else if (filme.sinopse == undefined) {
 
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [SINOPSE] inválido'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if(filme.data_lancamento == undefined || filme.data_lancamento.length != 10){
+    } else if (filme.data_lancamento == undefined || filme.data_lancamento.length != 10) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [DATA_LANCAMENTO] inválido'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if(filme.duracao == "" || filme.duracao == null || filme.duracao == undefined || filme.duracao.length > 8 ){
+    } else if (filme.duracao == "" || filme.duracao == null || filme.duracao == undefined || filme.duracao.length > 8) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [DURAÇAO] inválido'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if(filme.orcamento == "" || filme.orcamento == null || filme.orcamento == undefined || typeof(filme.orcamento) != 'number'){
+    } else if (filme.orcamento == "" || filme.orcamento == null || filme.orcamento == undefined || typeof (filme.orcamento) != 'number') {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ORÇAMENTO] inválido'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if(filme.trailer == undefined || filme.trailer.length > 200 ){
+    } else if (filme.trailer == undefined || filme.trailer.length > 200) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [TRAILER] inválido'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if(filme.capa == "" || filme.capa == null || filme.capa == undefined || filme.capa.length > 200){
+    } else if (filme.capa == "" || filme.capa == null || filme.capa == undefined || filme.capa.length > 200) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [CAPA] inválido'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
     } else {
         return false
-}
+    }
 
 };
 
