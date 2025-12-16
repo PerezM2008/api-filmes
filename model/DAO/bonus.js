@@ -1,8 +1,8 @@
 /***********************************************************************************************************************************
- * Objetivo: Arquivo responsável pela realização do CRUD da tabela Genero no Banco de Dados MySQL
- * Data: 29/10/2025
+ * Objetivo: BONUS DO MARCEL
+ * Data: 16/12/2025
  * Autor: Matheus Perez
- * Versão: 1.0
+ * Versão: 2.0
  * 
  ************************************************************************************************************************************/
 
@@ -11,12 +11,12 @@ const { PrismaClient } = require('../../generated/prisma');
 const prisma = new PrismaClient();
 
 //Retorna todas as informações do Gênero
-const getAllAtor = async() => {
+const getAllBonus = async() => {
 
     try{
 
     //script que será utilizado no BD
-    let sql = `select * from tbl_ator order by id desc`;
+    let sql = `select * from tbl_bonus order by id desc`;
 
     //Result - Executa no BD o script do sql (variavel que está o script)
     let result = await prisma.$queryRawUnsafe(sql);
@@ -32,10 +32,10 @@ const getAllAtor = async() => {
 };
 
 //Retorna Filtrado por ID
-const getFilterByAtorId = async (id) => {
+const getFilterByBonusId = async (id) => {
 
     try {
-    let sql = `select * from tbl_ator where id = ${id}`;
+    let sql = `select * from tbl_bonus where id = ${id}`;
 
     let result = await prisma.$queryRawUnsafe(sql);
 
@@ -49,21 +49,20 @@ const getFilterByAtorId = async (id) => {
     }
 };
 
-// INSERT - Adciona um novo ator na tabela
-const setInsertAtor = async (ator) => {
+// INSERT - Adciona um novo marcel na tabela
+const setInsertMarcel = async (marcel) => {
     try {
-            let sql = `INSERT INTO tbl_ator (
-            nome,
-            data_nascimento,
-            nascionalidade,
-            cpf,
-            tempo_carreira
-            ) values (
-            '${ator.nome}',
-            '${ator.data_nascimento}',
-            '${ator.nascionalidade}',
-            '${ator.cpf}',
-            '${ator.tempo_carreira}'
+            let sql = `INSERT INTO tbl_bonus (
+                foto,
+                nome,
+                descrição,
+                data_registro
+
+            )values (
+            '${marcel.foto}',
+            '${marcel.nome}',
+            '${marcel.descrição}',
+            '${marcel.data_registro}'
             )`
                 
 
@@ -79,16 +78,16 @@ const setInsertAtor = async (ator) => {
         }    
 };
 
-const setUpdateAtor = async(ator) => {
+const setUpdateMarcel = async(marcel) => {
     try {
-        let sql = `update tbl_ator set
-                        nome                 =   '${ator.nome}',
-                        data_nascimento      =   '${ator.data_nascimento}',
-                        nascionalidade       =   '${ator.nascionalidade}',
-                        cpf                  =   '${ator.cpf}',
-                        tempo_carreira       =   '${ator.tempo_carreira}',
+        let sql = `update tbl_bonus set
+                        foto                 =   '${marcel.foto}',
+                        nome                 =   '${marcel.nome}',
+                        descrição            =   '${marcel.descrição}',
+                        data_registro        =   '${marcel.data_registro}'
+                       
 
-                        where id            =    '${ator.id}'`
+                        where id            =    ${marcel.id}`
 
 
         // $executeRawUnsafe() ->  Executar scripts SQL que não tem retorno de dados (INSERT, UPDATE, DELETE)
@@ -104,9 +103,9 @@ const setUpdateAtor = async(ator) => {
 
 };
 
-const setDeleteAtor = async(id) => {
+const setDeleteMarcel = async(id) => {
     try {
-        let sql = `DELETE FROM tbl_ator where id = ${id}`
+        let sql = `DELETE FROM tbl_bonus where id = ${id}`
 
             let result = await prisma.$executeRawUnsafe(sql)
 
@@ -121,10 +120,10 @@ const setDeleteAtor = async(id) => {
     }
 }
 
-const getSelectLastIdAtor = async() => {
+const getSelectLastIdMarcel = async() => {
     try {
         //Script SQL
-        let sql = `select * from tbl_ator order by id desc`;
+        let sql = `select * from tbl_bonus order by id desc`;
 
         //Executa no DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -143,10 +142,10 @@ const getSelectLastIdAtor = async() => {
 
 /*//////////////////////////////////////////////////////////////////////*/
 module.exports = {
-    getAllAtor,
-    getFilterByAtorId,
-    setUpdateAtor,
-    setInsertAtor,
-    setDeleteAtor,
-    getSelectLastIdAtor
+    getAllBonus,
+    getFilterByBonusId,
+    setUpdateMarcel,
+    setInsertMarcel,
+    setDeleteMarcel,
+    getSelectLastIdMarcel
 }

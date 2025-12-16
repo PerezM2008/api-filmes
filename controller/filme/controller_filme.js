@@ -27,7 +27,7 @@ const listarFilmes = async () => {
         let result = await filmeDAO.getSelectAllFilms();
 
         if (result) {
-            console
+            
             if (result.length > 0) {
 
                 for (filme of result) {
